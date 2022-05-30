@@ -1,18 +1,17 @@
 import unittest
 
-from py import process
-
 from model import DataSource, describe_data_source
 import csv
 from urllib.parse import urlparse
-from dateutil.parser import parse as parse_date_str
+from datetime import datetime
 from decimal import Decimal
 
 data_source = DataSource(
         'fed funds rate', 
         'federal funds effective rate', 
         'https://fred.stlouisfed.org/series/FEDFUNDS', 
-        'file:///home/david/data/fed-funds-rate.csv'
+        'file:///home/david/data/fed-funds-rate.csv',
+        '%Y-%m-%d'
     )
 
 class FedFundsRateTests(unittest.TestCase):
@@ -28,7 +27,8 @@ class FedFundsRateTests(unittest.TestCase):
 
         def process_data_point(data, datum):
             (date_str, irate_str) = datum
-            data.append((parse_date_str(date_str), Decimal(irate_str)))
+            dt = datetime.strptime(date_str, data_source.date_format)
+            data.append((dt, Decimal(irate_str)))
         
         def generator_from_local_file(path):
             source_file_path = uri.path
