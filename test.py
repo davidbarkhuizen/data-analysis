@@ -2,11 +2,18 @@ import unittest
 
 from py import process
 
-from model import DataSetSource
+from model import DataSource, describe_data_source
 import csv
 from urllib.parse import urlparse
+from dateutil.parser import parse as parse_date_str
+from decimal import Decimal
 
-source = DataSetSource('fed funds rate', 'federal funds effective rate', 'https://fred.stlouisfed.org/series/FEDFUNDS', 'file:///home/david/data/fed-funds-rate.csv')
+data_source = DataSource(
+        'fed funds rate', 
+        'federal funds effective rate', 
+        'https://fred.stlouisfed.org/series/FEDFUNDS', 
+        'file:///home/david/data/fed-funds-rate.csv'
+    )
 
 class FedFundsRateTests(unittest.TestCase):
 
@@ -15,20 +22,21 @@ class FedFundsRateTests(unittest.TestCase):
         # DATE,FEDFUNDS
         # 1954-07-01,0.80
 
-        uri = urlparse(source.uri)
+        uri = urlparse(data_source.uri)
 
         print(uri)
 
-        data = []
-        def process_data_point(datum):
+        def process_data_point(data, datum):
             (date_str, irate_str) = datum
-            print(date_str, irate_str)
-
+            data.append((parse_date_str(date_str), Decimal(irate_str)))
+        
         def generator_from_local_file(path):
             source_file_path = uri.path
             print(source_file_path)
             with open(source_file_path) as source_file:
-                for row in csv.reader(source_file, delimiter=','):
+                reader = iter(csv.reader(source_file, delimiter=','))
+                next(reader) # discard header
+                for row in reader:
                     yield (row[0], row[1])
                 return 
 
@@ -40,8 +48,16 @@ class FedFundsRateTests(unittest.TestCase):
             case _:
                 raise Exception(f'unsupported scheme {uri.scheme}')
         
+        data = []
         for data_point in data_point_generator:
-            process_data_point(data_point)        
+            process_data_point(data, data_point)        
+
+        sorted_data = sorted(data, key=lambda x: x[0])
+
+        print(describe_data_source(data_source))
+        print(f'{len(data)} data points')
+        print(sorted_data[0])
+        print(sorted_data[-1])
 
 if __name__ == '__main__':
     unittest.main()

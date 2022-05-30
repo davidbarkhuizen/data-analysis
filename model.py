@@ -1,3 +1,6 @@
 from collections import namedtuple
 
-DataSetSource = namedtuple('DataSetSource', 'name description source uri')
+DataSource = namedtuple('DataSource', 'name description reference uri')
+
+def describe_data_source(ds: DataSource) -> str:
+    return f'{ds.name} ({ds.uri})'
