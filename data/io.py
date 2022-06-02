@@ -1,12 +1,13 @@
 import csv
+from typing import List, Tuple
 from urllib.parse import urlparse
 import logging
 
 from data.model import DataSource
 
-def fetch_csv_data(source: DataSource):
+def fetch_csv_data(source: DataSource) -> List[Tuple]:
     
-    def from_local_file(file_path):
+    def from_local_file(file_path: str) -> List[Tuple]:
         
         with open(file_path) as source_file:
             reader = iter(csv.reader(source_file, delimiter=source.delimiter))

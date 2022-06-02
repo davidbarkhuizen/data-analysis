@@ -1,10 +1,11 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Tuple
 from data.model import DataSource
 
 date_format = '%Y-%m-%d'
 
-def row_parser(row):
+def row_parser(row: Tuple) -> Tuple[datetime, Decimal]:
 
     date_str, irate_str = row[0], row[1]
     
@@ -20,5 +21,5 @@ source = DataSource(
     'file:///home/david/data/fed-funds-rate.csv',
     True,
     ',',
-    lambda row: row_parser(row)    
+    row_parser
 )
