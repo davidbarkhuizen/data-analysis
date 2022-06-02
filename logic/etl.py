@@ -3,7 +3,7 @@ from typing import List, Tuple
 from urllib.parse import urlparse
 import logging
 
-from data.model import DataSource
+from logic.model import DataSource
 
 def fetch_csv_data(source: DataSource) -> List[Tuple]:
     

@@ -1,12 +1,12 @@
 
 import unittest
-from data.io import fetch_csv_data
+from logic.etl import fetch_csv_data
 from analyses.fed_funds_rate import source
-from data.model import describe_data_source
+from logic.model import describe_data_source
 
 class FedFundsRateTests(unittest.TestCase):
 
-    def test_csv_load(self):
+    def test_xxx(self):
 
         print(describe_data_source(source))
 

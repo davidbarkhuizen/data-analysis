@@ -1,5 +1,9 @@
 import unittest
-loader = unittest.TestLoader()
-tests = loader.discover('.')
+
 testRunner = unittest.runner.TextTestRunner()
+
+loader = unittest.TestLoader()
+tests = loader.discover('tests')
+print(tests)
+
 testRunner.run(tests)

@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import Tuple
-from data.model import DataSource
+from logic.model import DataSource
 
 date_format = '%Y-%m-%d'
 
