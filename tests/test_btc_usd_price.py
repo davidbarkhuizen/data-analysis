@@ -2,8 +2,8 @@
 import unittest
 from logic.etl import fetch_csv_data
 from analyses.btc_usd_price import source
-from logic.model import describe_data_source
-from logic.plot import plot
+from logic.model import Series, describe_data_source
+from logic.plot import plot_time_series
 
 class BTCUSDPriceTests(unittest.TestCase):
 
@@ -22,8 +22,12 @@ class BTCUSDPriceTests(unittest.TestCase):
         delta = []
         for i in range(len(t) - 1):
             delta.append(sorted_data[i+1][1] - sorted_data[i][1])
+        delta.append(delta[-1])
 
-        plot('BTC USD Price', t, y, delta, 'Date', 'USD Price', 'Delta')
+        plot_time_series('BTC USD Price (logarithmic)', Series('Date', t), [
+            Series('ln(Price/USD)', y),
+            Series('Delta', delta),
+        ])
 
 if __name__ == '__main__':
     unittest.main()

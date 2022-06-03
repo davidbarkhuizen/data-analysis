@@ -3,7 +3,7 @@ import unittest
 from logic.etl import fetch_csv_data
 from analyses.fed_funds_rate import source
 from logic.model import describe_data_source
-from logic.plot import plot
+from logic.plot import plot_time_series
 
 # class FedFundsRateTests(unittest.TestCase):
 

@@ -7,8 +7,15 @@ DataSource = namedtuple('DataSource', [
         'url', 
         'discard_header', 
         'delimiter',
-        'row_parser']
-    )
+        'row_parser'
+    ]
+)
 
 def describe_data_source(ds: DataSource) -> str:
     return f'{ds.name} ({ds.url})'
+
+Series = namedtuple('Series', [
+    'label',
+    'values'
+    ]
+)

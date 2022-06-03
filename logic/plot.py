@@ -1,33 +1,35 @@
 from typing import List, Optional
 from matplotlib import pyplot
 
-def plot(
+from logic.model import Series
+
+# time series
+# value_series
+# - values
+# - label
+
+def plot_time_series(
         title: str,
-        time: List, 
-        values: List, 
-        values_secondary: Optional[List], 
-        time_label: str, 
-        value_label: str,
-        values_secondary_label: Optional[str]
+        time_series: Series,
+        values_serieses: List[Series]
     ):
 
     figure, axis_1 = pyplot.subplots()
 
-    # figure.suptitle(title)
+    primary_value_series = values_serieses[0]
+
+    axis_1.plot(time_series.values, primary_value_series.values, color='green', linestyle='solid')
+    axis_1.set_xlabel(time_series.label)
+    axis_1.set_ylabel(primary_value_series.label, color='green')    
+
+    for value_series in values_serieses[1:]:
+
+        axis_2 = axis_1.twinx()
+        axis_2.plot(time_series.values, value_series.values, color='purple', linestyle='solid')
+
+        if value_series.label:
+            axis_2.set_ylabel(value_series.label, color='purple')
     
     pyplot.title(title)
-
-    axis_1.plot(time, values, color='green', linestyle='solid')
-    axis_1.set_xlabel(time_label)
-    axis_1.set_ylabel(value_label, color='green')
-
-    if values_secondary:
-        
-        axis_2 = axis_1.twinx()
-        axis_2.plot(time[:-1], values_secondary, color='purple', linestyle='solid')
-        axis_2.set_xlabel(time_label)
-
-        if values_secondary_label:
-            axis_2.set_ylabel(values_secondary_label, color='purple')
-    
+    # figure.suptitle(?)
     pyplot.show()
