@@ -1,5 +1,7 @@
 FROM python:3.12-slim-bookworm AS python-base
 
+WORKDIR /var/www/data
+
 FROM python-base AS python-virtualenv
 
 RUN python -m pip install virtualenv
@@ -12,4 +14,4 @@ COPY requirements.in .
 RUN . .venv/bin/activate && python -m piptools compile
 RUN . .venv/bin/activate && python -m piptools sync
 
-
+FROM python-modules AS final
