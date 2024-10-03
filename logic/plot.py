@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from matplotlib import pyplot
 
 from logic.model import Series
