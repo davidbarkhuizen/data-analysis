@@ -23,7 +23,7 @@ def fetch_csv_data(source: DataSource) -> List[Tuple]:
     data = None
     match locator.scheme:
         case 'file':
-            data = from_local_file(locator.path)
+            data = from_local_file(f'.{locator.path}')
         case _:
             raise Exception(f'unsupported URL scheme {locator.scheme}')
 
