@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
 
+token="datax"
+
 build_image () {
 
-    docker buildx build --file docker/Dockerfile --progress=plain --tag data:latest .
+    docker buildx build --file docker/Dockerfile --progress=plain --tag "$token:latest" .
 }
 
 stop_container () {
 
-    container_id=`sudo docker ps -aqf "name=data"`
-    docker container stop $container_id
+    docker container stop $token
+    sleep 1
+    docker container rm $token 
 }
 
 start_container () {
-    docker run --name=data -d data:latest tail -f /dev/null 
+    docker run --name=$token -d "$token:latest" tail -f /dev/null 
 }
 
 copy_requirements_txt_from_container () {
 
-    container_id=`sudo docker ps -aqf "name=data"`
-    docker cp $container_id:/var/www/data/requirements.txt .
+    container_id=`sudo docker ps -aqf "name=$token"`
+    docker cp $container_id:/var/www/datax/requirements.txt .
 }
 
 build_image
+stop_container
 start_container
 sleep 1
 copy_requirements_txt_from_container
