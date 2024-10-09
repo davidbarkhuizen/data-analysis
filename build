@@ -1,8 +1,28 @@
- #!/usr/bin/env bash
+#!/usr/bin/env bash
 
-docker buildx build --file docker/Dockerfile --progress=plain --tag data:latest .
+build_image () {
 
-docker run --name=data -d data:latest tail -f /dev/null 
-container_id=`sudo docker ps -aqf "name=data"`
-docker cp $container_id:/var/www/data/requirements.txt .
-docker container stop $container_id
+    docker buildx build --file docker/Dockerfile --progress=plain --tag data:latest .
+}
+
+stop_container () {
+
+    container_id=`sudo docker ps -aqf "name=data"`
+    docker container stop $container_id
+}
+
+start_container () {
+    docker run --name=data -d data:latest tail -f /dev/null 
+}
+
+copy_requirements_txt_from_container () {
+
+    container_id=`sudo docker ps -aqf "name=data"`
+    docker cp $container_id:/var/www/data/requirements.txt .
+}
+
+build_image
+start_container
+sleep 1
+copy_requirements_txt_from_container
+stop_container

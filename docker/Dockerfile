@@ -11,7 +11,11 @@ RUN . .venv/bin/activate && python -m pip install pip-tools
 FROM python-virtualenv AS python-modules
 
 COPY requirements.in .
-RUN . .venv/bin/activate && python -m piptools compile
-RUN . .venv/bin/activate && python -m piptools sync
+COPY dev-requirements.in .
+
+RUN . .venv/bin/activate && python -m piptools compile requirements.in
+RUN . .venv/bin/activate && python -m piptools compile dev-requirements.in
+
+RUN . .venv/bin/activate && python -m piptools sync requirements.txt dev-requirements.txt
 
 FROM python-modules AS final
